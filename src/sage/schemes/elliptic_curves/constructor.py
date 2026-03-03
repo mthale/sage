@@ -26,6 +26,7 @@ AUTHORS:
 from sage.rings.integer_ring import ZZ
 from sage.rings.rational_field import QQ
 from sage.rings.rational_field import RationalField
+from sage.rings.function_field.function_field_rational import RationalFunctionField_global
 
 import sage.rings.abc
 from sage.rings.polynomial.multi_polynomial_ring import MPolynomialRing_base
@@ -519,6 +520,9 @@ class EllipticCurveFactory(UniqueFactory):
         elif isinstance(R, FiniteField) or (isinstance(R, sage.rings.abc.IntegerModRing) and R.characteristic().is_prime()):
             from .ell_finite_field import EllipticCurve_finite_field
             return EllipticCurve_finite_field(R, x)
+        elif isinstance(R, RationalFunctionField_global):
+            from .ell_function_field import EllipticCurve_rational_function_field_global
+            return EllipticCurve_rational_function_field_global(R, x)
         elif R in _Fields:
             from .ell_field import EllipticCurve_field
             return EllipticCurve_field(R, x)

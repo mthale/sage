@@ -17,6 +17,7 @@ py.install_sources(
   'ell_local_data.py',
   'ell_modular_symbols.py',
   'ell_number_field.py',
+  'ell_function_field.py',
   'ell_padic_field.py',
   'ell_point.py',
   'ell_rational_field.py',
