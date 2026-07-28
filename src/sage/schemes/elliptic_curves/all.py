@@ -25,7 +25,7 @@ from sage.schemes.elliptic_curves.constructor import (EllipticCurve,
 
 from sage.misc.lazy_import import lazy_import
 lazy_import('sage.schemes.elliptic_curves.jacobian', 'Jacobian')
-lazy_import('sage.schemes.elliptic_curves.ell_function_field', ['EllipticCurve_rational_function_field_global', 'EllipticCurve_function_field'])
+lazy_import('sage.schemes.elliptic_curves.ell_function_field', 'EllipticCurve_function_field')
 lazy_import('sage.schemes.elliptic_curves.ell_finite_field', 'special_supersingular_curve')
 lazy_import('sage.schemes.elliptic_curves.ell_rational_field',
             ['cremona_curves', 'cremona_optimal_curves'])
