@@ -68,6 +68,7 @@ from sage.rings.integer import Integer
 from sage.rings.rational import Rational
 from sage.rings.finite_rings.finite_field_constructor import FiniteField as GF
 from sage.rings.rational_field import RationalField
+from sage.rings.function_field.function_field import FunctionField
 from sage.rings.real_mpfr import RealField
 from sage.misc.cachefunc import cached_method
 from sage.misc.fast_methods import WithEqualityById
@@ -191,8 +192,10 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
         if flag:
             if self.__base_ring.is_finite():
                 self._point = ell_point.EllipticCurvePoint_finite_field
-            else:
+            elif isinstance(self.__base_ring(), FunctionField):
                 self._point = ell_point.EllipticCurvePoint_field
+            else:
+                self._point = ell_point.EllipticCurvePoint_function_field
         else:
             self._point = ell_point.EllipticCurvePoint
 

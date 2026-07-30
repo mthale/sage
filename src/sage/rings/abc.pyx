@@ -80,6 +80,21 @@ class UniversalCyclotomicField(Field):
 
     pass
 
+class FunctionField(Field):
+    r"""
+    Abstract base class for :class:`~sage.rings.function_field.function_field.FunctionField`.
+    This class is defined for the purpose of ``isinstance`` tests.  It should not be
+    instantiated.
+
+    EXAMPLES::
+
+        sage: import sage.rings.abc
+        sage: K.<t> = FunctionField(GF(5))
+        sage: isinstance(K, sage.rings.abc.FunctionField)
+        True
+    """
+
+    pass
 
 class AlgebraicField_common(Field):
     r"""

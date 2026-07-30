@@ -5005,3 +5005,99 @@ class EllipticCurvePoint_finite_field(EllipticCurvePoint_field):
                                   "order of a point on an elliptic curve over finite fields")
 
     additive_order = order
+
+class EllipticCurvePoint_function_field(EllipticCurvePoint_field):
+    r"""
+    Class for points on an elliptic curve over function fields, where points are defined by rational functions of a single variable.
+    """
+    # temporary import as module from ell_function_field
+    #from ell_function_field import non_archimedean_local_height
+    from sage.rings.function_field.function_field import FunctionField
+
+    def finite_places(self):
+        r"""
+        
+        INPUT:
+        
+        - ``self`` a point on an elliptic curve over a function field
+        
+        OUTPUT: a list of
+        
+        - places of (possible) reduction of that
+        
+        Finds the places of good reduction for the point P.
+        [AdAEC, pg 213] We can count either poles or zeros of f = P.x()
+        The order of vanishing of f at the point p.
+        """
+        _P = self
+        x = _P.x()
+        if x.denominator() == 1:
+            if x.numerator() == 0:
+                return []
+            else:
+                return x.zeros()
+        else:
+            finite_places = []
+            for p in x.poles():
+                if not p.is_infinite_place():
+                    finite_places.append(p)
+            return finite_places
+    
+    def height(self, v=None, is_minimal=None):
+        r"""
+        Computes the canonical height at the point "self" 
+        
+        
+        - allow for 
+        """
+        
+        # local height: h_v (P) = max{0, v(x(P)))} + 1/6 v(discriminant(E))
+
+        h = 0    
+
+        if v is None:            
+            _places = list(set(self.curve().places() + self.finite_places()))
+            _D = self.curve().discriminant()
+            h = sum(((self.height(v, is_minimal=(self.curve().is_local_minimal(v))))* v.degree()) for v in _places)
+            return h
+        
+        if is_minimal:
+            _E = self.curve()
+            _P = self
+            offset = QQ.zero()
+        else:
+            _E = self.curve().local_minimal_model(v)
+            iso = self.curve().isomorphism_to(_E)
+            _P = iso(self)
+            offset = (self.curve().discriminant()/_E.discriminant()).valuation(v)
+            
+        a1, a2, a3, a4, a6 = _E.a_invariants()
+        b2, b4, b6, b8 = _E.b_invariants()
+        c4 = _E.c4()
+        c6 = _E.c6()
+        x,y = _P.xy()
+        
+        D = _E.discriminant()
+        K = _E.base_ring()
+        K_b = K.constant_field()
+        
+        N = D.valuation(v) 
+        A = (3*x**2 + 2*a2*x + a4 - a1*y).valuation(v)
+        B = (2*y + a1*x + a3).valuation(v)
+        C = (3*x**4 + b2*x**3 + 3*b4*x**2 + 3*b6*x + b8 ).valuation(v)
+            
+        if A <= 0 or B <= 0:            
+            r = max(0, -x.valuation(v))            
+        elif  c4.valuation(v) == 0:
+            #singular fiber of type I_N
+            n = min(B, N/2)
+            r = -n*(N-n)/N
+        elif C >= 3*B:
+            #singular fiber of type IV or IV*
+            r = -2*B/3
+        else:
+            r = -C/4
+        
+        r -= offset/6
+        return r #+ (D.valuation(v)/6)
+              
