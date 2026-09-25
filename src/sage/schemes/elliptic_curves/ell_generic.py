@@ -118,8 +118,8 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
         .. NOTE::
 
             This class should not be called directly; use
-            :class:`sage.constructor.EllipticCurve` to construct
-            elliptic curves.
+            :class:`EllipticCurve <sage.schemes.elliptic_curves.constructor.EllipticCurveFactory>`
+            to construct elliptic curves.
 
         EXAMPLES::
 
@@ -1587,8 +1587,9 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
     def isomorphism(self, u, r=0, s=0, t=0, *, is_codomain=False):
         r"""
         Given four values `u,r,s,t` in the base ring of this curve, return
-        the :class:`WeierstrassIsomorphism` defined by `u,r,s,t` with this
-        curve as its codomain.
+        the
+        :class:`~sage.schemes.elliptic_curves.weierstrass_morphism.WeierstrassIsomorphism`
+        defined by `u,r,s,t` with this curve as its codomain.
         (The value `u` must be a unit; the values `r,s,t` default to zero.)
 
         Optionally, if the keyword argument ``is_codomain`` is set to ``True``,
@@ -1728,8 +1729,8 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
         .. SEEALSO::
 
             - :meth:`division_polynomial`
-            - :meth:`_multiple_x_numerator`
-            - :meth:`_multiple_x_denominator`
+            - ``_multiple_x_numerator``
+            - ``_multiple_x_denominator``
 
         INPUT:
 
@@ -2151,14 +2152,14 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
         .. WARNING::
 
             There may of course be cancellation between the numerator and the
-            denominator (:meth:`_multiple_x_denominator`). Be careful. E.g. if
+            denominator (``_multiple_x_denominator``). Be careful. E.g. if
             a point on an elliptic curve with coefficients in `\ZZ` reduces to
             a singular point modulo a prime, then there will be cancellation,
             otherwise not, see [Wu2004]_.
 
         .. SEEALSO::
 
-            :meth:`_multiple_x_denominator`
+            ``_multiple_x_denominator``
 
         AUTHORS:
 
@@ -2649,7 +2650,8 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
     def identity_morphism(self):
         r"""
         Return the identity endomorphism of this elliptic curve
-        as an :class:`EllipticCurveHom` object.
+        as an :class:`~sage.schemes.elliptic_curves.hom.EllipticCurveHom`
+        object.
 
         EXAMPLES::
 
@@ -2676,7 +2678,8 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
 
         OUTPUT:
 
-        (:class:`~wm.WeierstrassIsomorphism`) An isomorphism from ``self`` to ``other``.
+        (:class:`~sage.schemes.elliptic_curves.weierstrass_morphism.WeierstrassIsomorphism`)
+        An isomorphism from ``self`` to ``other``.
 
         .. NOTE::
 
@@ -2730,7 +2733,9 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
 
         OUTPUT:
 
-        A list of :class:`~wm.WeierstrassIsomorphism` objects
+        A list of
+        :class:`~sage.schemes.elliptic_curves.weierstrass_morphism.WeierstrassIsomorphism`
+        objects
         consisting of all the isomorphisms from the curve ``self`` to
         itself defined over ``field``.
 
@@ -2815,7 +2820,9 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
 
         OUTPUT:
 
-        A list of :class:`~wm.WeierstrassIsomorphism` objects consisting of all
+        A list of
+        :class:`~sage.schemes.elliptic_curves.weierstrass_morphism.WeierstrassIsomorphism`
+        objects consisting of all
         the isomorphisms from the curve ``self`` to the curve
         ``other`` defined over ``field``.
 
@@ -3041,8 +3048,8 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
         OUTPUT:
 
         If ``twisted`` is ``False`` (the default), an
-        :class:`EllipticCurve_generic` object encapsulating an untwisted
-        Montgomery curve.  Otherwise, a
+        :class:`~sage.schemes.elliptic_curves.ell_generic.EllipticCurve_generic`
+        object encapsulating an untwisted Montgomery curve.  Otherwise, a
         :class:`~sage.schemes.curves.projective_curve.ProjectivePlaneCurve`
         object encapsulating a (potentially twisted) Montgomery curve.
 
@@ -3111,7 +3118,8 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
         curves, which do not feature the Montgomery `B` coefficient, the
         returned curve in this case is merely a
         :class:`~sage.schemes.curves.projective_curve.ProjectivePlaneCurve`
-        rather than the usual :class:`EllipticCurve_generic`.
+        rather than the usual
+        :class:`~sage.schemes.elliptic_curves.ell_generic.EllipticCurve_generic`.
 
         Arithmetic on curves of this type is not implemented natively,
         but can easily be emulated by mapping back and forth to the
@@ -3260,16 +3268,16 @@ class EllipticCurve_generic(WithEqualityById, plane_curve.ProjectivePlaneCurve):
             component, including the two flex points
 
         - ``plot_points`` -- passed to
-          :func:`sage.plot.generate_plot_points`
+          :func:`sage.plot.plot.generate_plot_points`
 
         - ``adaptive_tolerance`` -- passed to
-          :func:`sage.plot.generate_plot_points`
+          :func:`sage.plot.plot.generate_plot_points`
 
         - ``adaptive_recursion`` -- passed to
-          :func:`sage.plot.generate_plot_points`
+          :func:`sage.plot.plot.generate_plot_points`
 
         - ``randomize`` -- passed to
-          :func:`sage.plot.generate_plot_points`
+          :func:`sage.plot.plot.generate_plot_points`
 
         - ``**args`` -- all other options are passed to
           :class:`sage.plot.line.Line`
