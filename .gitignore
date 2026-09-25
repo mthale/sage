@@ -1,5 +1,6 @@
 ## We use this file both as .gitignore and .dockerignore,
 ## which have different semantics.
+/.devcontainer
 
 /dist
 /local

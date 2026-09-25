@@ -88,7 +88,7 @@ class EllipticCurveFactory(UniqueFactory):
     - ``EllipticCurve(j=j0)`` or ``EllipticCurve_from_j(j0)``: Return
       an elliptic curve with `j`-invariant ``j0``.
 
-    - ``EllipticCurve(polynomial)``: Read off the `a`-invariants from>
+    - ``EllipticCurve(polynomial)``: Read off the `a`-invariants from
       the polynomial coefficients, see
       :func:`EllipticCurve_from_Weierstrass_polynomial`.
 
@@ -320,11 +320,11 @@ class EllipticCurveFactory(UniqueFactory):
 
         sage: E = EllipticCurve([RR(1), 3]); E
         Elliptic Curve defined by y^2 = x^3 + 1.00000000000000*x + 3.00000000000000
-        over Real Field with 53 bits of precision>
+        over Real Field with 53 bits of precision
         sage: type(E)
         <class 'sage.schemes.elliptic_curves.ell_field.EllipticCurve_field_with_category'>
 
-        sage: # needs sage.symbolic 
+        sage: # needs sage.symbolic
         sage: E = EllipticCurve([SR(i),i]); E
         Elliptic Curve defined by y^2 = x^3 + I*x + I over Symbolic Ring
         sage: type(E)

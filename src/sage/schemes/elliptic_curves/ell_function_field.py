@@ -15,10 +15,10 @@ We construct an elliptic curve over a function field::
 # Copyright etc
 
 import math
-import sage.rings.abc
-from sage.categories.number_fields import NumberFields 
+import sage.rings.abc # pyright: ignore[reportMissingModuleSource]
+from sage.categories.number_fields import NumberFields
 from sage.categories.finite_fields import FiniteFields
-from sage.rings.integer import Integer
+from sage.rings.integer import Integer # pyright: ignore[reportMissingModuleSource]
 from sage.rings.integer_ring import ZZ
 from sage.rings.polynomial.polynomial_ring import polygen
 from sage.rings.rational_field import QQ
@@ -67,41 +67,39 @@ class EllipticCurve_function_field(EllipticCurve_field):
             raise TypeError("base field must be a rational function field with finite constant field")
         """
         EllipticCurve_field.__init__(self, K, ainvs)
-        
-        
-    
+
+
+
     _point = EllipticCurvePoint_function_field
-    
-    
+
+
     def places(self):
         r"""
-        Return the places of bad reduction on the elliptic curve    
-        
+        Return the places of bad reduction on the elliptic curve
         INPUT:
 
         - ``self`` -- elliptic curve defined over a rational function field
-        
+
         OUTPUT: a list of
-        
+
         - ``
-        
+
         """
         #inf_place = self.base_field().places()[0]
-        D = self.discriminant()
+        #D = self.discriminant()
         _places = self.discriminant().poles()
         zero_places = self.discriminant().zeros()
         _places.extend(p for p in zero_places if p not in _places)
         return _places
-    
+
     def is_local_integral(self, v) -> bool:
         r"""Determines if coeffecients have positive valuation at place v.
             In order to check minimality the model must be integral"""
-        
+
         if all(a.valuation(v) >= 0 for a in self.a_invariants()):
             return True
-        else:
-            return False
-            
+        return False
+
     def local_integral_model(self, v):
         r"""Return a model integral at the place v.
         INPUT:
@@ -122,49 +120,47 @@ class EllipticCurve_function_field(EllipticCurve_field):
         # Uniformizer at v (element with valuation 1) u = 1/pi^{|k|}
         u = (v.local_uniformizer()) ** e
 
-        return self.change_weierstrass_model([u, 0, 0, 0])    
-        
+        return self.change_weierstrass_model([u, 0, 0, 0])
+
     def is_local_minimal(self, v):
         r"""
-        Determines if model is minimal at place v. 
+        Determines if model is minimal at place v.
         If no places are stated, a list of tuples is given with the boolean evaluation and the place
         """
-        
+
         _E = self
-        if _E.is_local_integral(v) == False:
+        if not _E.is_local_integral(v):
             return False
 
         if _E.base_field().characteristic() != 2 or _E.base_field().characteristic() != 3:
             if _E.discriminant().valuation(v) < 12:
                 return True
-            elif _E.c4().valuation(v) < 4 or _E.c6().valuation(v) < 6:
+            if _E.c4().valuation(v) < 4 or _E.c6().valuation(v) < 6:
                 return True
-            else:
-                return False
-        else:
-            raise ValueError("Field characteristic must not be 2 or 3")
-    
+            return False
+        raise ValueError("Field characteristic must not be 2 or 3")
+
     def local_minimal_model(self, v):
         r"""Returns minimal model if self is not already minimal.
-        
+
         INPUT:
         - ``v`` -- a place of the base rational function field
         OUTPUT:
         An elliptic curve isomorphic to ``self`` whose Weierstrass coefficients
         have minimal valuation at ``v``.
-        """    
+        """
         _E = self.local_integral_model(v)
-        
+
         if _E.is_local_minimal(v):
             return _E
-        
+
         c4 = _E.c4()
         c6 = _E.c6()
-        D = _E.discriminant()
-        
+        #D = _E.discriminant()
+
         if _E.base_field().characteristic() == 2 or _E.base_field().characteristic() == 3:
             raise ValueError("Field characteristic must not be 2 or 3")
-        
+
         if c4 != 0 and c6 != 0:
             q = max(math.ceil((c4.valuation(v))/4), math.ceil(c6.valuation(v)/6))
         elif c4 == 0:
@@ -173,5 +169,5 @@ class EllipticCurve_function_field(EllipticCurve_field):
             q = math.ceil(-c4.valuation(v)/4)
         else:
             q = 0
-        
+
         return self.change_weierstrass_model([v.local_uniformizer()**-q, 0, 0, 0])
