@@ -3963,6 +3963,7 @@ class EllipticCurvePoint_number_field(EllipticCurvePoint_field):
         ALGORITHM:
 
         See [Sil1988]_, Section 5.
+        
 
         EXAMPLES:
 
@@ -5017,14 +5018,16 @@ class EllipticCurvePoint_function_field(EllipticCurvePoint_field):
 
     def finite_places(self):
         r"""
-
+        Returns a list of places of `P` corresponding to the poles of the
+        x-coordinate of `P` where `P` = ``self``
+        
         INPUT:
 
         - ``self`` a point on an elliptic curve over a function field
 
-        OUTPUT: a list of
+        OUTPUT: a list of places of
 
-        - places of (possible) reduction of that
+        - ``places`` of possible reduction of that
 
         Finds the places of good reduction for the point P.
         [AdAEC, pg 213] We can count either poles or zeros of f = P.x()
@@ -5042,12 +5045,66 @@ class EllipticCurvePoint_function_field(EllipticCurvePoint_field):
             if not p.is_infinite_place():
                 finite_places.append(p)
         return finite_places
+
     def height(self, v=None, is_minimal=None):
         r"""
-        Computes the canonical height at the point "self"
+        Computes the Néron-Tate canonical height at the point.
+        
+        The canonical height is determined by the non-archimedean local heights since a rational function field has no archimedean places.
+        
+        INPUT:
+        
+        - ``self`` -- a point on an elliptic curve over a function field `K`
+        
+        - ``v`` -- a non-archimedean place of `K`, or ``None`` (default).
+          If `v` is a non-archimedean place, return the local height
+          of ``self`` at `v`. If `v` is ``None``, return the global height.
+          
+        - ``n`` -- boolean, or ``None`` (default). Ignored
+          when ``v`` is ``None`` (default) or ``True``.  Otherwise,
+          when the place ``v`` is specified: if ``True``, the model is
+          assumed to be both locally integral and a local minimal
+          model; if ``None`` (default) or ``False``, a local minimal
+          model is computed and the computation is done on that model.
 
+        OUTPUT:
+        
+                A rational number. The normalisation is twice that in Silverman's
+                paper [Sil1988]_. Note that this local height depends on the
+                model of the curve.
+        
+        ALGORITHM:
+        
+        See [Sil1988]_, Section 5.
+            [Kuw1990]_.
+                
+        EXAMPLES:
+        
+            sage: K.<t> = FunctionField(GF(11))
+            sage: E = EllipticCurve(K, [0, 0, 0, 0, 1 - t ^ 6]); E
+            Elliptic Curve defined by y^2 = x^3 + (10*t^6+1) over Rational function field in t
+             over  Finite Field of size 11
+            sage: P = E(t^2, 1)
+            sage: P.height()
+            2
+            sage: P2 = P+P; P2
+            (5*t^8 + 9*t^2 : 9*t^12 + 10*t^6 + 10 : 1)
+            sage: (P2).height()
+            8
+            sage: 2^2 * P.height() == (P2).height()
+            True
+            
+            sage: P3 = 3*P; P3.x()
+            (t^18 + 8*t^6 + 5)/(t^16 + t^10 + 3*t^4)
+            sage: P3.height()
+            18
+            
+        Local Height::
+            sage: v = P3.finite_places()[3]; v
+            Place (t^2 + 5*t + 3)
+            sage: P3.height(v)
+            4
 
-        - allow for
         """
 
         # local height: h_v (P) = max{0, v(x(P)))} + 1/6 v(discriminant(E))
@@ -5057,7 +5114,7 @@ class EllipticCurvePoint_function_field(EllipticCurvePoint_field):
         if v is None:
             _places = list(set(self.curve().places() + self.finite_places()))
             _D = self.curve().discriminant()
-            h = sum(((self.height(v, is_minimal=(self.curve().is_local_minimal(v))))* v.degree()) for v in _places)
+            h = sum(self.height(v, is_minimal=(self.curve().is_local_minimal(v))) for v in _places)
             return h
 
         if is_minimal:
@@ -5083,7 +5140,7 @@ class EllipticCurvePoint_function_field(EllipticCurvePoint_field):
         N = D.valuation(v)
         A = (3*x**2 + 2*a2*x + a4 - a1*y).valuation(v)
         B = (2*y + a1*x + a3).valuation(v)
-        C = (3*x**4 + b2*x**3 + 3*b4*x**2 + 3*b6*x + b8 ).valuation(v)
+        C = (3*x**4 + b2*x**3 + 3*b4*x**2 + 3*b6*x + b8).valuation(v)
 
         if A <= 0 or B <= 0:
             r = max(0, -x.valuation(v))
@@ -5098,4 +5155,4 @@ class EllipticCurvePoint_function_field(EllipticCurvePoint_field):
             r = -C/4
 
         r -= offset/6
-        return r #+ (D.valuation(v)/6)
+        return r*v.degree()

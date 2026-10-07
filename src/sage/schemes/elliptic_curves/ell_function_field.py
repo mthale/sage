@@ -15,7 +15,7 @@ We construct an elliptic curve over a function field::
 # Copyright etc
 
 import math
-import sage.rings.abc # pyright: ignore[reportMissingModuleSource]
+import sage.rings.abc
 from sage.categories.number_fields import NumberFields
 from sage.categories.finite_fields import FiniteFields
 from sage.rings.integer import Integer # pyright: ignore[reportMissingModuleSource]
@@ -46,8 +46,6 @@ class EllipticCurve_function_field(EllipticCurve_field):
     Elliptic curve over rational function field with finite constant field
     """
 
-
-
     def __init__(self, K, ainvs):
         r"""
         EXAMPLES:
@@ -68,25 +66,20 @@ class EllipticCurve_function_field(EllipticCurve_field):
         """
         EllipticCurve_field.__init__(self, K, ainvs)
 
-
-
     _point = EllipticCurvePoint_function_field
-
 
     def places(self):
         r"""
-        Return the places of bad reduction on the elliptic curve
+        Return the places of (possible) bad reduction on the elliptic curve
         INPUT:
 
         - ``self`` -- elliptic curve defined over a rational function field
 
-        OUTPUT: a list of
+        OUTPUT: a list of 
 
         - ``
 
         """
-        #inf_place = self.base_field().places()[0]
-        #D = self.discriminant()
         _places = self.discriminant().poles()
         zero_places = self.discriminant().zeros()
         _places.extend(p for p in zero_places if p not in _places)
